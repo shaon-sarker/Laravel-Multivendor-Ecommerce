@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\SubcategoryController;
 
 Route::prefix('admin')->group(function(){
     Route::get('/adl/login',[AuthController::class,'index'])->name('login.page');
@@ -17,6 +18,7 @@ Route::prefix('admin')->group(function(){
 
 Route::middleware('admin')->prefix('admin')->group(function(){
     Route::resource('/category',CategoryController::class);
+    Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/brand',BrandController::class);
 
 });
