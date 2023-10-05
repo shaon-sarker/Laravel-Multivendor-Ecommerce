@@ -23,9 +23,9 @@
             </a>
           </li>
           <li>
-            <a href="typography.html" class="waves-effect">
+            <a href="{{ route('product.index') }}" class="waves-effect">
               <i class="ti-ruler-pencil"></i>
-              <span> Typography <span class="badge badge-primary pull-right"></span>
+              <span> Product <span class="badge badge-primary pull-right"></span>
               </span>
             </a>
           </li>

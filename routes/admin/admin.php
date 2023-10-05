@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SubcategoryController;
 
 Route::prefix('admin')->group(function(){
@@ -17,8 +18,18 @@ Route::prefix('admin')->group(function(){
 });
 
 Route::middleware('admin')->prefix('admin')->group(function(){
+    Route::resource('/brand',BrandController::class);
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
-    Route::resource('/brand',BrandController::class);
+});
+
+Route::controller(ProductController::class)->middleware('admin')->prefix('admin')->group(function(){
+    Route::get('/product', 'index')->name('product.index');
+    Route::get('/product/create', 'create')->name('product.create');
+    Route::post('/product/store', 'store')->name('product.store');
+    Route::get('/product/edit/{id}', 'edit')->name('product.edit');
+    Route::post('/product/update', 'update')->name('product.update');
+    Route::post('/product/update/image', 'updateproductimage')->name('product.update.image');
+
 
 });
