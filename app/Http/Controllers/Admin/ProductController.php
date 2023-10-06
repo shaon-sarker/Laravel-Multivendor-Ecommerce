@@ -12,7 +12,7 @@ use App\Models\Subcategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-
+use RealRashid\SweetAlert\Facades\Alert;
 use Intervention\Image\Facades\Image as Image;
 
 
@@ -89,8 +89,8 @@ class ProductController extends Controller
         } // end foreach
 
         /// End Multiple Image Upload From her //////
-        return back();
-        // return redirect()->route('all.product');
+        Alert::success('Product Added Successfully');
+        return redirect()->route('product.index');
     }
 
     public function edit($id)
@@ -136,7 +136,8 @@ class ProductController extends Controller
             'updated_at' => Carbon::now(), 
         ]);
 
-        return back();
+        Alert::info('Product Updated');
+        return redirect()->route('product.index');
 
     }
 
@@ -161,6 +162,80 @@ class ProductController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
-        return back();
+        Alert::info('Product Image Updated');
+        return redirect()->route('product.index');
     }
+
+    public function updateproductmultiimage(Request $request)
+    {
+        $imgs = $request->multi_img;
+
+        foreach($imgs as $id => $img ){
+            $imgDel = MultiImage::findOrFail($id);
+            $old_image = $imgDel->photo_name;
+            $delete_path = public_path() . '/uploads/product/multiimage/'.$old_image;
+            unlink($delete_path);
+
+        $make_name = hexdec(uniqid()).'.'.$img->getClientOriginalExtension();
+        Image::make($img)->resize(800,800)->save('uploads/product/multiimage/'.$make_name);
+        $uploadPath = $make_name;
+
+        MultiImage::where('id',$id)->update([
+                'photo_name' => $uploadPath,
+                'updated_at' => Carbon::now(),
+        ]); 
+        } // end foreach
+
+        Alert::info('Product Image Updated');
+        return redirect()->route('product.index');
+    }
+
+    public function MulitImageDelelte($id)
+    {
+        $oldImg = MultiImage::findOrFail($id);
+        $old_image = $oldImg->photo_name;
+        $delete_path = public_path() . '/uploads/product/multiimage/'.$old_image;
+        unlink($delete_path);
+        MultiImage::findOrFail($id)->delete();
+
+        Alert::error('Product Deleted');
+        return redirect()->route('product.index');
+    }
+
+    public function ProductInactive($id)
+    {
+        Product::findOrFail($id)->update(['status' => 0]);
+        Alert::success('Product Inactive');
+        return redirect()->route('product.index');
+    }
+
+    public function ProductActive($id)
+    {
+        Product::findOrFail($id)->update(['status' => 1]);
+        Alert::success('Product active');
+        return redirect()->route('product.index');
+    }
+
+    public function ProductDelete($id)
+    {
+        $product = Product::findOrFail($id);
+        $old_image = $product->product_image;
+        $delete_path = public_path() . '/uploads/product/productimage/'.$old_image;
+        unlink($delete_path);
+        Product::findOrFail($id)->delete();
+    
+        $imges = MultiImage::where('product_id',$id)->get();
+        foreach($imges as $img){
+            $old_image = $img->photo_name;
+            $delete_path = public_path() . '/uploads/product/multiimage/'.$old_image;
+            unlink($delete_path);
+            MultiImage::where('product_id',$id)->delete();
+        }
+
+        Alert::error('Product Deleted');
+        return redirect()->route('product.index');
+    }
+
+    
+
 }

@@ -150,7 +150,7 @@
                     <form action="{{ route('product.update.image') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                     <input type="hidden" name="id" value="{{ $products->id }}">
-                    <input type="text" name="old_img" value="{{ $products->product_image }}">
+                    <input type="hidden" name="old_img" value="{{ $products->product_image }}">
 
                     <div>
                         <label for="">Product Image</label>
@@ -171,12 +171,32 @@
                     <h3 class="panel-title">Product Multi Image Information</h3>
                 </div>
                 <div class="panel-body">
-                    
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sl</th>
+                                <th>Image</th>
+                                <th>Change Image</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <form action="{{ route('product.update.multiimage') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @foreach ($multi_images as $key=>$img)
+                                <tr>
+                                    <th scope="row">{{ $key+1 }}</th>
+                                    <td><img style="width:80; height: 40px" src="{{ asset('uploads/product/multiimage') }}/{{ $img->photo_name }}" alt=""></td>
+                                    <td> <input type="file" name="multi_img[{{ $img->id }}]"> </td>
+                                    <td> <input type="submit" class="btn btn-success px-4" value="Update Image"> </td>
+                                    <td><a href="{{ route('product.multiimg.delete',$img->id) }}" class="btn btn-danger">Delete</a></td>
+                                </tr>
+                                @endforeach-
+                            </form>
+                        </tbody>
+                    </table>  
                   
-                    
-                    <div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
+                  
                 </div>
             </div>
         </div>       

@@ -56,7 +56,13 @@
                                             </td>
                                             <td>
                                                 <a href="{{ route('product.edit',$product->id) }}" class="btn btn-primary">Edit<i class="fa fa-eyedropper"></i></a>
-                                                <a href="" class="btn btn-danger">Delete <i class="mdi mdi-delete btn-icon-prepend"></i></a>
+                                                <a href="{{ route('product.delete',$product->id) }}" class="btn btn-danger">Delete <i class="mdi mdi-delete btn-icon-prepend"></i></a>
+
+                                                @if ($product->status == 1)
+                                                <a href="{{ route('product.inactive',$product->id) }}" class="btn btn-primary" title="Inactive"> <i class="fa fa-thumbs-down"></i> </a>
+                                                @else
+                                                <a href="{{ route('product.active',$product->id) }}" class="btn btn-primary" title="Active"> <i class="fa fa-thumbs-up"></i> </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @endforeach

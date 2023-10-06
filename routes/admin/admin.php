@@ -30,6 +30,9 @@ Route::controller(ProductController::class)->middleware('admin')->prefix('admin'
     Route::get('/product/edit/{id}', 'edit')->name('product.edit');
     Route::post('/product/update', 'update')->name('product.update');
     Route::post('/product/update/image', 'updateproductimage')->name('product.update.image');
-
-
+    Route::post('/product/update/multiimage', 'updateproductmultiimage')->name('product.update.multiimage');
+    Route::get('/product/multiimg/delete/{id}' , 'MulitImageDelelte')->name('product.multiimg.delete');
+    Route::get('/product/inactive/{id}' , 'ProductInactive')->name('product.inactive');
+    Route::get('/product/active/{id}' , 'ProductActive')->name('product.active');
+    Route::get('/delete/product/{id}' , 'ProductDelete')->name('product.delete');
 });
